@@ -43,7 +43,7 @@
 - (NSLayoutConstraint*) constraintForAttribute:(NSLayoutAttribute)attribute
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"firstAttribute = %d && firstItem = %@", attribute, self];
-    NSArray *fillteredArray = [[self.superview constraints] filteredArrayUsingPredicate:predicate];
+    NSArray *fillteredArray = [[self constraints] filteredArrayUsingPredicate:predicate];
     if(fillteredArray.count == 0)
     {
         return nil;
