@@ -113,8 +113,14 @@
 - (void)sizeToSubviews
 {
     [self updateSizes];
-    CGSize fittingSize = [self systemLayoutSizeFittingSize: UILayoutFittingCompressedSize];
-    self.frame = CGRectMake(0, 0, 320, fittingSize.height);
+    CGSize size = CGSizeMake(0, 0);
+    for (UIView *view in self.subviews) {
+        if (view.frame.origin.x + view.frame.size.width > size.width)
+            size.width = view.frame.origin.x + view.frame.size.width;
+        if (view.frame.origin.y + view.frame.size.height > size.height)
+            size.height = view.frame.origin.y + view.frame.size.height;
+    }
+    self.frame = CGRectMake(0, 0, size.width, size.height);
 }
 
 
