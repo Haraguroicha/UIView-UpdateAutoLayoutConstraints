@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface UIView (UpdateAutoLayoutConstraints)
+
 - (BOOL) setConstraintConstant:(CGFloat)constant forAttribute:(NSLayoutAttribute)attribute;
 - (CGFloat) constraintConstantforAttribute:(NSLayoutAttribute)attribute;
 - (NSLayoutConstraint*) constraintForAttribute:(NSLayoutAttribute)attribute;
@@ -17,4 +18,5 @@
 - (void)hideByWidth:(BOOL)hidden;
 - (CGSize) getSize;
 - (void)sizeToSubviews;
+
 @end

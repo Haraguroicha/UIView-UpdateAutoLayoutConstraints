@@ -10,87 +10,78 @@
 
 @implementation UIView (UpdateAutoLayoutConstraints)
 
-
-- (BOOL) setConstraintConstant:(CGFloat)constant forAttribute:(NSLayoutAttribute)attribute
-{
-    NSLayoutConstraint * constraint = [self constraintForAttribute:attribute];
-    if(constraint)
-    {
+- (BOOL)setConstraintConstant:(CGFloat)constant forAttribute:(NSLayoutAttribute)attribute {
+    NSLayoutConstraint *constraint = [self constraintForAttribute:attribute];
+    if(constraint) {
         [constraint setConstant:constant];
         return YES;
-    }else
-    {
-        [self.superview addConstraint: [NSLayoutConstraint constraintWithItem:self attribute:attribute relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:constant]];
+    } else {
+        [self.superview addConstraint: [NSLayoutConstraint constraintWithItem:self
+                                                                    attribute:attribute
+                                                                    relatedBy:NSLayoutRelationEqual
+                                                                       toItem:nil
+                                                                    attribute:NSLayoutAttributeNotAnAttribute
+                                                                   multiplier:1.0f
+                                                                     constant:constant]];
         return NO;
     }
 }
 
 
-- (CGFloat) constraintConstantforAttribute:(NSLayoutAttribute)attribute
-{
-    NSLayoutConstraint * constraint = [self constraintForAttribute:attribute];
-    
+- (CGFloat)constraintConstantforAttribute:(NSLayoutAttribute)attribute {
+    NSLayoutConstraint *constraint = [self constraintForAttribute:attribute];
     if (constraint) {
         return constraint.constant;
-    }else
-    {
+    } else {
         return NAN;
     }
-    
 }
 
 
-- (NSLayoutConstraint*) constraintForAttribute:(NSLayoutAttribute)attribute
-{
+- (NSLayoutConstraint *)constraintForAttribute:(NSLayoutAttribute)attribute {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"firstAttribute = %d && firstItem = %@", attribute, self];
     NSArray *fillteredArray = [[self constraints] filteredArrayUsingPredicate:predicate];
-    if(fillteredArray.count == 0)
-    {
+    if (fillteredArray.count == 0) {
         return nil;
-    }else
-    {
+    } else {
         return fillteredArray.firstObject;
     }
 }
 
 
-- (void)hideByHeight:(BOOL)hidden
-{
-    [self hideView:hidden byAttribute:NSLayoutAttributeHeight];
+- (void)hideByHeight:(BOOL)hidden {
+    [self hideView:hidden
+       byAttribute:NSLayoutAttributeHeight];
 }
 
 
-- (void)hideByWidth:(BOOL)hidden
-{
-    [self hideView:hidden byAttribute:NSLayoutAttributeWidth];
+- (void)hideByWidth:(BOOL)hidden {
+    [self hideView:hidden
+       byAttribute:NSLayoutAttributeWidth];
 }
 
 
 
-- (void)hideView:(BOOL)hidden byAttribute:(NSLayoutAttribute)attribute
-{
+- (void)hideView:(BOOL)hidden byAttribute:(NSLayoutAttribute)attribute {
     if (self.hidden != hidden) {
         CGFloat constraintConstant = [self constraintConstantforAttribute:attribute];
         
-        if (hidden)
-        {
-            
+        if (hidden) {
             if (!isnan(constraintConstant)) {
                 self.alpha = constraintConstant;
-            }else
-            {
+            } else {
                 CGSize size = [self getSize];
-                self.alpha = (attribute == NSLayoutAttributeHeight)?size.height:size.width;
+                self.alpha = (attribute == NSLayoutAttributeHeight) ? size.height : size.width;
             }
             
-            [self setConstraintConstant:0 forAttribute:attribute];
+            [self setConstraintConstant:0
+                           forAttribute:attribute];
             self.hidden = YES;
-            
-        }else
-        {
-            if (!isnan(constraintConstant) ) {
+        } else {
+            if (!isnan(constraintConstant)) {
                 self.hidden = NO;
-                [self setConstraintConstant:self.alpha forAttribute:attribute];
+                [self setConstraintConstant:self.alpha
+                               forAttribute:attribute];
                 self.alpha = 1;
             }
         }
@@ -98,20 +89,17 @@
 }
 
 
-- (CGSize) getSize
-{
+- (CGSize)getSize {
     [self updateSizes];
     return CGSizeMake(self.bounds.size.width, self.bounds.size.height);
 }
 
-- (void)updateSizes
-{
+- (void)updateSizes {
     [self setNeedsLayout];
     [self layoutIfNeeded];
 }
 
-- (void)sizeToSubviews
-{
+- (void)sizeToSubviews {
     [self updateSizes];
     CGSize size = CGSizeMake(0, 0);
     for (UIView *view in self.subviews) {
@@ -122,6 +110,5 @@
     }
     self.frame = CGRectMake(0, 0, size.width, size.height);
 }
-
 
 @end
